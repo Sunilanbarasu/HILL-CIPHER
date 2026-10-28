@@ -1,35 +1,89 @@
-# HILL CIPHER
-HILL CIPHER
-EX. NO: 3 AIM:
- 
+# HILL CIPHER — EX. NO: 3
 
-IMPLEMENTATION OF HILL CIPHER
- 
-## To write a C program to implement the hill cipher substitution techniques.
+## AIM
 
-## DESCRIPTION:
+To write a C program to implement the Hill Cipher substitution technique for encryption.
 
-Each letter is represented by a number modulo 26. Often the simple scheme A = 0, B
-= 1... Z = 25, is used, but this is not an essential feature of the cipher. To encrypt a message, each block of n letters is  multiplied by an invertible n × n matrix, against modulus 26. To
-decrypt the message, each block is multiplied by the inverse of the m trix used for
- 
-encryption. The matrix used
- 
-for encryption is the cipher key, and it sho
- 
-ld be chosen
- 
-randomly from the set of invertible n × n matrices (modulo 26).
+## DESCRIPTION
 
+The Hill Cipher is a polygraphic substitution cipher that uses matrix multiplication to encrypt a message. Each letter is represented by a number from 0 to 25, where A = 0, B = 1, ..., Z = 25. The plaintext is divided into blocks of three letters and multiplied by a \\(3 \times 3\\) key matrix modulo 26 to obtain the ciphertext.
 
-## ALGORITHM:
+## ALGORITHM
 
-STEP-1: Read the plain text and key from the user. STEP-2: Split the plain text into groups of length three. STEP-3: Arrange the keyword in a 3*3 matrix.
-STEP-4: Multiply the two matrices to obtain the cipher text of length three.
-STEP-5: Combine all these groups to get the complete cipher text.
+1. Read the plaintext and key matrix from the user.
+2. Convert the plaintext letters into numbers from 0 to 25.
+3. Divide the plaintext into groups of three letters. Add padding if necessary.
+4. Arrange the key values in a \\(3 \times 3\\) matrix.
+5. Multiply each plaintext block by the key matrix modulo 26.
+6. Convert the resulting numbers into letters to obtain the ciphertext.
+7. Display the encrypted message.
 
-## PROGRAM 
+## PROGRAM
+
+```
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main()
+{
+    char plaintext[100], ciphertext[100];
+    int key[3][3];
+    int i, j, k, sum;
+    int len, block[3];
+
+    printf("Enter plaintext (uppercase letters): ");
+    scanf("%99s", plaintext);
+
+    len = strlen(plaintext);
+
+    for (i = 0; i < len; i++)
+        plaintext[i] = toupper(plaintext[i]);
+
+    /* Pad plaintext with X if required */
+    while (len % 3 != 0)
+        plaintext[len++] = 'X';
+
+    plaintext[len] = '\0';
+
+    printf("Enter 3x3 key matrix:\n");
+    for (i = 0; i < 3; i++)
+        for (j = 0; j < 3; j++)
+            scanf("%d", &key[i][j]);
+
+    for (i = 0; i < len; i += 3)
+    {
+        for (j = 0; j < 3; j++)
+            block[j] = plaintext[i + j] - 'A';
+
+        for (j = 0; j < 3; j++)
+        {
+            sum = 0;
+
+            for (k = 0; k < 3; k++)
+                sum += key[j][k] * block[k];
+
+            ciphertext[i + j] = (sum % 26) + 'A';
+        }
+    }
+
+    ciphertext[len] = '\0';
+
+    printf("Ciphertext: %s\n", ciphertext);
+
+    return 0;
+}
+
+```
 
 ## OUTPUT
+<img width="778" height="463" alt="image" src="https://github.com/user-attachments/assets/b8b258f6-dd06-4225-b00c-be75486e9015" />
+
+
 
 ## RESULT
+
+Thus, the C program to implement the Hill Cipher substitution technique was written and executed successfully, and the ciphertext was obtained.
+
+Note: This program implements encryption only. For decryption, the key matrix must have an inverse modulo 26.
